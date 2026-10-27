@@ -59,16 +59,19 @@ export default function LandingPage() {
     setIsVideoMuted(videoRef.current.muted);
   };
 
-  // 1. Query real latest batch for dynamic Hero Verification Card
+  const hasToken = !!localStorage.getItem('accessToken');
+
+  // 1. Query real latest batch for dynamic Hero Verification Card (if logged in)
   const { data: latestBatchData, isLoading: batchLoading } = useQuery({
     queryKey: ['public-latest-batch'],
     queryFn: () => batchesApi.list({ limit: 1 }).then((r) => r.data),
-    retry: 1,
+    enabled: hasToken,
+    retry: false,
     staleTime: 60000,
   });
 
   const heroBatch = latestBatchData?.data?.[0];
-  const heroBatchId = heroBatch?.publicBatchId || heroBatch?.id;
+  const heroBatchId = heroBatch?.publicBatchId || heroBatch?.id || 'HC-DEMO-001';
 
   // 2. Query batch verification details if batch exists
   const { data: heroVerifyData } = useQuery({
@@ -78,11 +81,12 @@ export default function LandingPage() {
     retry: 1,
   });
 
-  // 3. Query real hives & telemetry
+  // 3. Query real hives & telemetry (if logged in)
   const { data: hivesData } = useQuery({
     queryKey: ['public-hives-preview'],
     queryFn: () => hivesApi.list({ limit: 1 }).then((r) => r.data),
-    retry: 1,
+    enabled: hasToken,
+    retry: false,
     staleTime: 60000,
   });
 

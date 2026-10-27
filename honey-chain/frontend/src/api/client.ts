@@ -28,9 +28,14 @@ api.interceptors.response.use(
 
     if (error.response?.status === 401 && !original._retry) {
       const refreshToken = localStorage.getItem('refreshToken');
+      const publicPaths = ['/', '/demo', '/about', '/how-it-works', '/contact', '/login', '/register'];
+      const isPublic = publicPaths.includes(window.location.pathname) || window.location.pathname.startsWith('/verify');
+
       if (!refreshToken) {
         clearAuth();
-        window.location.href = '/login';
+        if (!isPublic) {
+          window.location.href = '/login';
+        }
         return Promise.reject(error);
       }
 
@@ -56,7 +61,9 @@ api.interceptors.response.use(
         return api(original);
       } catch {
         clearAuth();
-        window.location.href = '/login';
+        if (!isPublic) {
+          window.location.href = '/login';
+        }
         return Promise.reject(error);
       } finally {
         isRefreshing = false;
