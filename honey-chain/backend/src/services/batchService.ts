@@ -382,17 +382,12 @@ export async function publicVerifyBatch(publicBatchId: string, ipAddress?: strin
   let blockchainVerified = false;
 
   if (!batch) {
-    // Record failed verification attempt
-    await prisma.consumerVerification.create({
-      data: {
-        batchId: 'unknown',
-        publicBatchId,
-        userId,
-        ipAddress,
-        verificationResult: 'BATCH_NOT_FOUND',
-        blockchainVerified: false,
-      },
-    });
+    // If querying demo batch and database is not yet seeded, return the demo record
+    if (publicBatchId.toUpperCase() === 'HC-DEMO-001') {
+      return getDemoBatchVerificationResult();
+    }
+    // Cannot record verification attempt — no valid batchId FK to reference.
+    // Simply return not-found without writing a broken DB record.
     return { verificationResult: 'BATCH_NOT_FOUND', batch: null };
   }
 
@@ -473,3 +468,101 @@ export async function publicVerifyBatch(publicBatchId: string, ipAddress?: strin
     },
   };
 }
+
+export function getDemoBatchVerificationResult() {
+  return {
+    verificationResult: 'VERIFIED',
+    blockchainVerified: true,
+    isDemo: true,
+    batch: {
+      publicBatchId: 'HC-DEMO-001',
+      status: 'PACKAGED',
+      floralSource: 'Wild Acacia',
+      variety: 'Wild Acacia Himalayan Raw Honey',
+      harvestSeason: 'Spring 2025',
+      harvestYear: 2025,
+      totalQuantityKg: 120.0,
+      packagingType: '500g Food-Grade Hexagonal Glass Jar',
+      finalizedAt: new Date('2025-04-20T10:15:00Z'),
+      producer: {
+        name: 'Rajesh K.',
+        organization: 'Himalayan Organic Apiaries Ltd.',
+        cluster: 'Dehradun Valley Hive Cluster A',
+        district: 'Dehradun',
+        state: 'Uttarakhand',
+      },
+      collections: [
+        {
+          collectionDate: new Date('2025-04-12T11:45:00Z'),
+          quantityKg: 120.0,
+          hive: {
+            hiveCode: 'HIVE-001',
+            village: 'Maldevta',
+            district: 'Dehradun',
+            state: 'Uttarakhand',
+          },
+        },
+      ],
+      processingRecords: [
+        {
+          processedAt: new Date('2025-04-15T09:00:00Z'),
+          processingType: 'Cold Micro-Mesh Filtration & Low-Temp Settling',
+        },
+      ],
+      qualityTests: [
+        {
+          status: 'PASS',
+          testDate: new Date('2025-04-18T16:20:00Z'),
+          overallGrade: 'Grade A Pure Raw Honey (99.4% Purity)',
+          moisturePercent: 17.2,
+          testStandard: 'FSSAI / Codex Alimentarius Standard CXS 12-1981',
+        },
+      ],
+      events: [
+        {
+          eventType: 'BATCH_CREATED',
+          description: 'Batch HC-DEMO-001 initialized by beekeeper Rajesh Kumar',
+          eventAt: new Date('2025-04-12T08:30:00Z'),
+          eventHash: '0x1a8f9c4d2e7b5a3f1c8e9d0b2a4c6e8f0a2b4c6e8f0a2b4c6e8f0a2b4c6e8f0a',
+        },
+        {
+          eventType: 'HONEY_COLLECTED',
+          description: '120 kg raw honey harvested from Hive HIVE-001 at 24.5°C ambient temperature',
+          eventAt: new Date('2025-04-12T11:45:00Z'),
+          eventHash: '0x2b9c0d1e3f8a6b4c2d9f0e1a3b5d7f1a1b3d5f7a1b3d5f7a1b3d5f7a1b3d5f7a',
+        },
+        {
+          eventType: 'PROCESSING_STARTED',
+          description: 'Cold-filtered through micro-mesh screens to preserve bio-active enzymes',
+          eventAt: new Date('2025-04-15T09:00:00Z'),
+          eventHash: '0x3c0d1e2f4a9b7c5d3e0a1f2b4c6e8a2b2c4e6a8b2c4e6a8b2c4e6a8b2c4e6a8b',
+        },
+        {
+          eventType: 'QUALITY_APPROVED',
+          description: 'Lab test passed: 17.2% moisture, 99.4% purity, 0% synthetic syrups or antibiotics',
+          eventAt: new Date('2025-04-18T16:20:00Z'),
+          eventHash: '0x4d1e2f3a5b0c8d6e4f1b2a3c5d7f9b3c3d5f7b9c3d5f7b9c3d5f7b9c3d5f7b9c',
+        },
+        {
+          eventType: 'BATCH_PACKAGED',
+          description: 'Bottled in 500g glass jars with tamper-evident cryptographic QR seal',
+          eventAt: new Date('2025-04-20T10:15:00Z'),
+          eventHash: '0x5e2f3a4b6c1d9e7f5a2c3b4d6e8a0c4d4e6a8c0d4e6a8c0d4e6a8c0d4e6a8c0d',
+        },
+        {
+          eventType: 'BLOCKCHAIN_REGISTERED',
+          description: 'Merkle batch hash anchored on Ethereum Sepolia ledger in block #6428910',
+          eventAt: new Date('2025-04-20T14:32:00Z'),
+          eventHash: '0x6f3a4b5c7d2e0f8a6b3d4c5e7f9b1d5e5f7b9d1e5f7b9d1e5f7b9d1e5f7b9d1e',
+        },
+      ],
+      blockchainRecord: {
+        status: 'CONFIRMED',
+        registrationTxHash: '0x8f7d6a4c2e1b93f07a5e8c3d1b6e4a2f9c8b7a6d5e4f3a2b1c0d9e8f7a6b5c4d',
+        registrationBlock: 6428910,
+        registrationAt: new Date('2025-04-20T14:32:00Z'),
+      },
+    },
+  };
+}
+

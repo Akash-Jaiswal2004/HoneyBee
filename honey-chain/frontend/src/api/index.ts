@@ -35,6 +35,19 @@ export const authApi = {
     api.get<ApiResponse<User>>('/auth/me'),
 };
 
+// ─── Beekeepers ──────────────────────────────────────────────────────────────
+
+export const beekeepersApi = {
+  getMyProfile: () =>
+    api.get('/beekeepers/me'),
+
+  updateProfile: (data: object) =>
+    api.post('/beekeepers', data),
+
+  getById: (id: string) =>
+    api.get(`/beekeepers/${id}`),
+};
+
 // ─── Hives ───────────────────────────────────────────────────────────────────
 
 export const hivesApi = {

@@ -1,5 +1,5 @@
 import { Router, Response, NextFunction } from 'express';
-import { authenticate, authorize } from '../middleware/auth';
+import { authenticate, authorize, optionalAuth } from '../middleware/auth';
 import { AuthenticatedRequest } from '../middleware/auth';
 import { prisma } from '../config/database';
 import { successResponse, paginatedResponse } from '../utils/helpers';
@@ -13,7 +13,7 @@ const router = Router();
 // ─── Listings ─────────────────────────────────────────────────────────────────
 
 // GET /api/marketplace/listings — public listing view (auth optional)
-router.get('/listings', authenticate, async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+router.get('/listings', optionalAuth, async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   try {
     const page = parseInt(req.query.page as string || '1');
     const limit = Math.min(parseInt(req.query.limit as string || '20'), 100);

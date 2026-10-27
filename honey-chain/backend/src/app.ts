@@ -22,6 +22,7 @@ import marketplaceRoutes from './routes/marketplace';
 import adminRoutes from './routes/admin';
 import aiRoutes from './routes/ai';
 import publicRoutes from './routes/public';
+import beekeeperRoutes from './routes/beekeepers';
 
 export function createApp() {
   const app = express();
@@ -106,6 +107,7 @@ export function createApp() {
   app.use('/api/marketplace', apiLimiter, marketplaceRoutes);
   app.use('/api/admin', apiLimiter, adminRoutes);
   app.use('/api/ai', apiLimiter, aiRoutes);
+  app.use('/api/beekeepers', apiLimiter, beekeeperRoutes);
 
   // ─── 404 and Error Handlers ───────────────────────────────────────────────────
   app.use(notFoundHandler);

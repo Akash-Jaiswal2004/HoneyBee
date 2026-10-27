@@ -234,6 +234,13 @@ export default function LandingPage() {
           {/* Right Action CTAs */}
           <div className="hidden sm:flex items-center gap-3">
             <Link
+              to="/demo"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-900 bg-amber-100 hover:bg-amber-200 border border-amber-300 px-3 py-2 rounded-lg shadow-xs transition-colors"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber-700" />
+              <span>Project Demo Mode</span>
+            </Link>
+            <Link
               to="/login"
               className="text-xs font-semibold text-[#0f172a] hover:text-[#d97706] px-3.5 py-2 rounded-lg transition-colors border border-transparent hover:border-[#e8e4dc]"
             >

@@ -9,6 +9,7 @@ import { LoadingPage } from './components/ui';
 const LandingPage = lazy(() => import('./pages/public/LandingPage'));
 const VerifyPage = lazy(() => import('./pages/public/VerifyPage'));
 const ScanQrPage = lazy(() => import('./pages/public/ScanQrPage'));
+const DemoWalkthroughPage = lazy(() => import('./pages/public/DemoWalkthroughPage'));
 const LoginPage = lazy(() => import('./pages/auth/LoginPage'));
 const RegisterPage = lazy(() => import('./pages/auth/RegisterPage'));
 const DashboardPage = lazy(() => import('./pages/dashboard/DashboardPage'));
@@ -46,8 +47,9 @@ export default function App() {
             {/* ── Public ──────────────────────────────────────────── */}
             <Route path="/" element={<LandingPage />} />
             <Route path="/welcome" element={<Navigate to="/" replace />} />
-            <Route path="/verify/:batchId" element={<VerifyPage />} />
+            <Route path="/demo" element={<DemoWalkthroughPage />} />
             <Route path="/verify/scan" element={<ScanQrPage />} />
+            <Route path="/verify/:batchId" element={<VerifyPage />} />
             <Route path="/about" element={<StubPage title="About Honey Chain" description="Honey Chain is a decentralized provenance and IoT telemetry platform for sustainable apiculture." />} />
             <Route path="/how-it-works" element={<StubPage title="How Honey Chain Works" description="Explore cryptographic Merkle tree batch verification, IoT sensor telemetry, and fair-trade marketplace mechanisms." />} />
             <Route path="/contact" element={<StubPage title="Contact & Support" description="Get in touch with the Honey Chain developer and apiary network team." />} />

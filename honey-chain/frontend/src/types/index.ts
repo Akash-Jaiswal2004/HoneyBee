@@ -160,6 +160,7 @@ export interface HoneyBatch {
   blockchainRecord?: {
     status: BlockchainRecordStatus;
     registrationTxHash?: string;
+    registrationBlock?: number;
     merkleRoot?: string;
     dataHash?: string;
     registeredAt?: string;
@@ -285,6 +286,7 @@ export type VerificationResult =
 export interface PublicVerificationData {
   verificationResult: VerificationResult;
   blockchainVerified: boolean;
+  isDemo?: boolean;
   batch: {
     publicBatchId: string;
     status: BatchStatus;
